@@ -1,4 +1,4 @@
-import '../dist/output.css'
+import './output.css'
 
 
 import React, { useRef, useState } from "react";
