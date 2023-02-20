@@ -1,4 +1,5 @@
 import './output.css'
+import {ProductList} from './ProductList'
 
 
 import React, { useRef, useState } from "react";
@@ -18,20 +19,182 @@ import { FreeMode, Pagination, Autoplay } from "swiper";
 
 
 export function NavBar() {
+	const [total, setTotal] = useState(0);
+	const [countProducts, setCountProducts] = useState(0);
+
+
+  var articulosCarrito = [];
+
+  const [active, setActive] = useState(false);
+  
+  //nav change
+  var carritoActivo = false; //Variable activo apagado
+  const [color, setColor] = useState(false)
+  const chageColor = () => {
+    if (window.scrollY >= 140) {
+      setColor(true)
+    }
+    else
+    {
+      setColor(false)
+      }
+  }
+
+  window.addEventListener('scroll', chageColor)
+
+  
+  const [activoProductos, setActivoProductos] = useState(false)
+  window.onload= function (){ 
 
 
   
-
-  const [count, setCount] = useState(0)
-
+    const listaCarritoId = document.querySelector('.listaCarrito tbody');
+    const eliminarCarrito = document.getElementById('eliminar')
+    const listaPadreCarrito = document.getElementById('listaPadreCarrito') 
+    var ejecutarPadre = document.getElementById('producto-carrito');
   
 
+
+    console.log(listaCarritoId)
+
+  ejecutarPadre.addEventListener('click',carrito);
+
+  function carrito(e) {
+    e.preventDefault()
+    
+
+    setActive(active => !active)
+
+}
+
+
+    var todosLosProductos = document.querySelectorAll('.productcont');
+
+    for (let i = 0; i < todosLosProductos.length; i++) {
+      const element = todosLosProductos[i];
+      
+      element.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActivoProductos(true)
+        setActive(true)
+        const productoTargetPrincipal = e.currentTarget; 
+        const productoTargetImg = productoTargetPrincipal.querySelector('img').src; 
+        const productoTargetTitle = productoTargetPrincipal.querySelector('h2').textContent;
+        const productoTargetPrice = productoTargetPrincipal.querySelector('span.text-primary-focus').textContent;
+        const productoTargetId = productoTargetPrincipal.getAttribute('data-id');
+
+
+        const infoProducto = {
+          imagen: productoTargetImg,
+          title: productoTargetTitle,
+          price: productoTargetPrice,
+          id: productoTargetId,
+          cantidad: 1
+        }
+
+
+        const existe = articulosCarrito.some(curso => curso.id === infoProducto.id);
+
+
+        if (existe) {
+          const productoVerificar = articulosCarrito.map(curso => {
+            if (curso.id === infoProducto.id ) {
+              curso.cantidad++;
+              return curso;
+            }
+            else {
+              return curso;
+            }
+          })
+          
+          articulosCarrito = [...productoVerificar];
+        }
+        else {
+
+        articulosCarrito = [...articulosCarrito, infoProducto];
+        }
+
+
+        
+
+
+
+
+        console.log(articulosCarrito);
+
+
+        while (listaCarritoId.firstChild) {
+          listaCarritoId.removeChild(listaCarritoId.firstChild)
+        }
+
+
+        articulosCarrito.forEach(curso => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>
+              ${curso.title}
+            </td>
+            <td>
+              <img src="${curso.imagen}" width="50">
+            </td>
+            <td>
+              ${curso.price}
+            </td>
+            <td>
+              ${curso.cantidad}
+            </td>
+          `
+            /*
+            <td>
+              <a href="#" class="borrar-product" data-id="${curso.id}">x</a>
+            </td>*/
+
+          listaCarritoId.appendChild(row);
+
+
+        })
+
+      })
+
+
+    }
+
+
+
+    console.log(todosLosProductos.length)
+
+    const comprar = document.querySelector("#comprar");
+    comprar.addEventListener("click", ()=>{
+      alert("Gracias por ver mi proyecto");
+    })
+
+
+    //logica de carrito
+
+    console.log(eliminarCarrito);
+    eliminarCarrito.addEventListener('click', () => {
+          articulosCarrito = [];
+          while (listaCarritoId.firstChild) {
+          listaCarritoId.removeChild(listaCarritoId.firstChild)
+        }
+        })
+
+
+
+  }
+  
   
 
   return (
     <div className='h-full '>
     <div data-theme="valentine" className='backgroundsMain min-h-full min-w-full'>
-    <div className= "header bg-transparent navbar bg-base-100 sticky top-0 ">
+
+  
+
+
+
+
+        <div className={color ? 'header  navbar sticky top-0 bg-primary border-b-2' : 'header bg-transparent navbar sticky top-0'}>
   <div className="navbar-start">
     <div className="dropdown">
       <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -58,112 +221,73 @@ export function NavBar() {
       <li ><a className='shadow hover:shadow-2xl px-5 text-xl border-2 border-secondary-focus text-secondary-content font-bold antialiased hover:bg-secondary-focus'>Support</a></li>
     </ul>
   </div>
-  <div className="navbar-end ">
-        <a href='#' className="pr-4 text-primary-focus ">
-              <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+  <div className="navbar-end elementoCarrito" >
+        <a href='#' id='producto-carrito' className={ `pr-4 text-primary-focus ` }>
+              <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className='h-6 w-6'>
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
               </svg>
         </a>
   </div>
 
-      
+
       </div>
 
+
+
+      
       <h1 className='text-center text-2xl lg:text-5xl p-24 font-bold  text-primary-focus underline'>Besos y abrasos</h1>
 
-      <div className=" grid justify-items-center place-content-center gap-16 grid-cols-[repeat(auto-fill,minmax(min(100%,25rem),1fr))]">
+
+
+
+
+
+
+      <div id="productosUnos" className=" grid static	 justify-items-center place-content-center gap-16 grid-cols-[repeat(auto-fill,minmax(min(100%,25rem),1fr))]">
         
-        <div className='productcont group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
-          <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
-
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
-
-            </div>
-          </a>
-        </div>
               
-
-          <div className='productcont group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+              <div data-id='1'   className='productcont uno group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/1.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'> Paquete pequeño</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
+          <span className='text-2xl  text-primary-focus mr-2'>$20</span>
+              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $50</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div  className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
             </div>
-          </a>
-          </div>
-          
-          <div className='productcont group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
-          <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
-
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
-
-            </div>
-          </a>
-          </div>
-          
-          <div className='productcont group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
-          <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
-
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
-
-            </div>
-          </a>
-          </div>
-          
-          <div className='productcont group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
-          <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
-
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
-
-            </div>
-          </a>
-          </div>
-          
-
-          <div className='productcont group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
-          <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
-
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
-
-            </div>
-          </a>
         </div>
+
+
+ <div data-id='2'  className='productcont dos group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='  transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/2.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'> Paquete Mediano</h2>
+          <h3 className='text-white mb-3'>Description Here</h3>
+          <span className='text-2xl  text-primary-focus mr-2'>$25</span>
+              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $60</span>
+
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="h-6 w-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+
+            </div>
+        </div>
+
+         <div data-id='3' className='productcont relative	tres  group  cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/3.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'> Paquete Grande </h2>
+          <h3 className='text-white mb-3'>Description Here</h3>
+          <span className='text-2xl  text-primary-focus mr-2'>$35</span>
+              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $80</span>
+
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+
+            </div>
+        </div>
+
+
         </div>
         
 
@@ -171,12 +295,15 @@ export function NavBar() {
 
         
 
-        <h2 className='text-center text-2xl lg:text-5xl p-24 font-bold  text-primary-focus underline'>Los recién llegados</h2>
+        <h2 className='text-center text-2xl lg:text-5xl p-24 font-bold  text-primary-focus underline' >Los recién llegados</h2>
 
 
         <Swiper
-        slidesPerView={4}
-        spaceBetween={30}
+        id='productosDos'
+          
+        slidesPerView={"auto"}
+          spaceBetween={30}
+          
           freeMode={{
             enabled: true,
             sticky: true,
@@ -192,152 +319,185 @@ export function NavBar() {
         }}
 
         grabCursor={true}
-       loop={true} 
+        loop={true}
 
+
+        
+          
+
+        breakpoints={{
+          300: {
+            slidesPerView: 1,
+          },
+          510: {
+            slidesPerView: 2,
+          },
+          768: {
+            slidesPerView: 3,
+          },
+          1024: {
+            slidesPerView: 4,
+          },
+        }}
+
+       
+  
           
 
           
         modules={[Autoplay,FreeMode, Pagination]}
-        className="swiper-slide mySwiper my-24  grid justify-items-center justify-center place-content-center gap-16 "
+        className=" swiper-slide mySwiper my-24  grid justify-items-center justify-center place-content-center gap-16 "
       >
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='1' className='productcont uno grid justify-items-center place-content-center group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/1.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete pequeño</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="h-6 w-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
-                <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
+                <div className="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
               </div>
         </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='2' className='productcont dos group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/2.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete mediano</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
                 <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
+              </div>
+        </SwiperSlide >
+          <SwiperSlide className='static'>
+            <div data-id='3' className='productcont tres group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/3.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete grande</h2>
+          <h3 className='text-white mb-3'>Description Here</h3>
+          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
+              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
+
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+
+                </div>
+                <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
               </div>
         </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='4' className='productcont cuatro group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/4.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete Hot</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
                 <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
               </div>
         </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='5' className='productcont cinco group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/5.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Corazon rojo</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
                 <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
               </div>
         </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='6' className='productcont seis group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/6.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Corazon Custom</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div class=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
                 <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
               </div>
         </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='7' className='productcont siete group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/7.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete de  corazon</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div className=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
                 <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
               </div>
         </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
+          <SwiperSlide className='static'>
+            <div data-id='8' className='productcont ocho group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/8.png" alt="" />
+          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Ramo de rosas</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
               <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
 
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
+              <div class=" hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
+                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
 
                 </div>
                 <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
-              </div>
-        </SwiperSlide>
-          <SwiperSlide>
-            <div className='group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <a href="">
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="https://cdn-icons-png.flaticon.com/512/2904/2904941.png" alt="" />
-          <h2 className='text-primary-focus font-bold text-2xl mt-5'>Toffe</h2>
-          <h3 className='text-white mb-3'>Description Here</h3>
-          <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
-              <span className=' line-through text-secondary-focus bg-gray-900 p-2 rounded-3xl'> $41.98</span>
-
-              <div class="hover:scale-110 absolute bottom-0 -right-10 rounded-tl-lg bg-secondary-focus text-white p-2 transition-all group-hover:right-0 ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path></svg>
-
-                </div>
-                <div class="absolute top-3 left-3 rounded-md bg-secondary-focus px-2 py-1 "><span class="text-center text-sm text-accent">New</span></div>
-          </a>
               </div>
         </SwiperSlide>
       </Swiper>
 
+<div //carro santo> 
+					className={`  ${
+						active ? 'fixed  bottom-1 right-1 h-52 w-82 menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box  ' : 'invisible '
+					}`}
+				>
+					{ articulosCarrito.length === 0 ? (
+						<>
+            <div className='' id='listaPadreCarrito'>
+              <table className='table-auto listaCarrito' >
+                <thead>
+                <tr>
+                  <th className=' p-1 rounded-xl text-black'>Nombre</th>
+                  <th className='p-1 rounded-xl text-black'>Imagen</th>
+                  <th className=' p-1 rounded-xl text-black'>Precio</th>
+                  <th className=' p-1 rounded-xl text-black'>Cantidad</th>
+                  <th className='bg-red-700 p-1 rounded-xl text-black transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300' id="eliminar">Eliminar</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <h3 className='btn btn-primary-focus'id="comprar" >Comprar</h3>
+            </div>
+						</>
+					) : (
+						<p className='text-lg text-center '>El carrito está vacío</p>
+					)}
+				</div>
         <footer className="footer p-10  text-base-content">
   <div>
     <span className="footer-title opacity-100 text-secondary-focus">Services</span> 
@@ -377,6 +537,9 @@ export function NavBar() {
 
       </div>
       </div>
+
+      
+
   )
 }
 
