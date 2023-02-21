@@ -247,7 +247,7 @@ export function NavBar() {
         
               
               <div data-id='1'   className='productcont uno group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/1.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/1.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'> Paquete pequeño</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20</span>
@@ -261,7 +261,7 @@ export function NavBar() {
 
 
  <div data-id='2'  className='productcont dos group relative cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='  transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/2.png" alt="" />
+          <img className='  transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/2.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'> Paquete Mediano</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$25</span>
@@ -275,7 +275,7 @@ export function NavBar() {
         </div>
 
          <div data-id='3' className='productcont relative	tres  group  cursor-pointer items-center  overflow-hidden    group ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-110  duration-300  shadow-2xl hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/3.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/3.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'> Paquete Grande </h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$35</span>
@@ -350,7 +350,7 @@ export function NavBar() {
       >
           <SwiperSlide className='static'>
             <div data-id='1' className='productcont uno grid justify-items-center place-content-center group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/1.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/1.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete pequeño</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -366,7 +366,7 @@ export function NavBar() {
         </SwiperSlide>
           <SwiperSlide className='static'>
             <div data-id='2' className='productcont dos group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/2.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/2.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete mediano</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -381,7 +381,7 @@ export function NavBar() {
         </SwiperSlide >
           <SwiperSlide className='static'>
             <div data-id='3' className='productcont tres group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/3.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/3.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete grande</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -396,7 +396,7 @@ export function NavBar() {
         </SwiperSlide>
           <SwiperSlide className='static'>
             <div data-id='4' className='productcont cuatro group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/4.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/4.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete Hot</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -411,7 +411,7 @@ export function NavBar() {
         </SwiperSlide>
           <SwiperSlide className='static'>
             <div data-id='5' className='productcont cinco group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/5.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/5.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Corazon rojo</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -426,7 +426,7 @@ export function NavBar() {
         </SwiperSlide>
           <SwiperSlide className='static'>
             <div data-id='6' className='productcont seis group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/6.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/6.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Corazon Custom</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -441,7 +441,7 @@ export function NavBar() {
         </SwiperSlide>
           <SwiperSlide className='static'>
             <div data-id='7' className='productcont siete group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/7.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/7.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Paquete de  corazon</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
@@ -456,7 +456,7 @@ export function NavBar() {
         </SwiperSlide>
           <SwiperSlide className='static'>
             <div data-id='8' className='productcont ocho group relative cursor-pointer items-center  overflow-hidden     ounded-3xl transition ease-in-out delay-150  hover:-translate-y-1 hover:scale-95  duration-300  shadow hover:shadow-red-700 w-60 border-4 border-primary-focus rounded-3xl p-10   justify-center text-center bg-black gap-2'>
-          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="../img/8.png" alt="" />
+          <img className='   transition ease-in-out delay-150  group-hover:-translate-y-1 hover:scale-110  duration-300     w-24 mx-auto bg-primary rounded-2xl p-2   ' src="./img/8.png" alt="" />
           <h2 className='text-primary-focus font-bold text-2xl mt-5'>Ramo de rosas</h2>
           <h3 className='text-white mb-3'>Description Here</h3>
           <span className='text-2xl  text-primary-focus mr-2'>$20.99</span>
