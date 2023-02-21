@@ -1757,10 +1757,6 @@ html {
   overflow: hidden;
 }
 
-.overscroll-none {
-  overscroll-behavior: none;
-}
-
 .rounded-2xl {
   border-radius: 1rem;
 }
